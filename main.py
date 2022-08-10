@@ -1,32 +1,30 @@
-import PySimpleGUI as sg
+import PySimpleGUI as sG
 import pandas as pd
 from glob import glob
 
 
+sG.theme('Dark Grey 13')
 
-sg.theme('Dark Grey 13')
 
 class PrimeiraTela:
     
     def __init__(self):
         layout = [
-            [sg.Input(), sg.FolderBrowse('Local arquivos',key='diretorio')], 
-            [sg.Input(), sg.FolderBrowse('Salvar arquivo', key='diretorio_save')],
-            [sg.Text('Nome do arquivo final:', size=(10,0)),sg.Input(size=(15,0),key='nome_arquivo')],
-            [sg.OK(), sg.Cancel()]         
+            [sG.I(), sG.FolderBrowse('Local arquivos', key='diretorio')],
+            [sG.Input(), sG.FolderBrowse('Salvar arquivo', key='diretorio_save')],
+            [sG.T('Nome do arquivo final:', size=(10, 0)), sG.Input(size=(15, 0), key='nome_arquivo')],
+            [sG.OK(), sG.Cancel()]
         ]
 
-        janela = sg.Window('JUNTADOR').layout(layout)
+        janela = sG.Window('JUNTADOR').layout(layout)
         self.button, self.values = janela.Read()
-        
 
-    def Iniciar(self):
+    def iniciar(self):
         diretorio = self.values['diretorio']        
         diretorio_save = self.values['diretorio_save']        
         nome = self.values['nome_arquivo']
 
-
-        # JUNTAR TODOS ARQUIVOS EXCEL
+        # JUNTAR TODOS ARQUIVOS EXCEL    
         lista_arquivo = []
         for arquivo in glob(fr'{diretorio}\*xlsx'):
             lista_arquivo.append(arquivo)
@@ -40,7 +38,6 @@ class PrimeiraTela:
         tabela_final = pd.concat(tabelas)    
         tabela_final.to_excel(fr'{diretorio_save}\{nome}.xlsx', sheet_name='tabelafinal', header=True, index=False)
 
+
 tela = PrimeiraTela()
-tela.Iniciar()
-
-
+tela.iniciar()
